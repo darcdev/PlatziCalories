@@ -20,6 +20,17 @@ $protein.keypress(() => {
     $protein.removeClass('is-invalid');
 })
 
+//Molde 
+/*
+ {
+    description : 'Manzana',
+    calories : 10,
+    carbs : 10,
+    protein : 10,
+  }
+*/
+const list = [];
+
 const validateInputs = () => {
 
     $description.val() ? '' : $description.addClass('is-invalid')
@@ -28,6 +39,18 @@ const validateInputs = () => {
     $protein.val() ? '' : $protein.addClass('is-invalid')
 
     if ($description.val() && $calories.val() && $carbs.val() && $protein.val()) {
-        console.log('agregar informacion');
+        add();
     }
+}
+
+const add = () => {
+    const newItem = {
+        description: $description.val(),
+        calories: parseInt($calories.val()),
+        carbs: parseInt($carbs.val()),
+        protein: parseInt($protein.val())
+    }
+
+    list.push(newItem)
+    console.log(list);
 }
