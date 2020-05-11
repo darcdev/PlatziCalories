@@ -52,5 +52,12 @@ const add = () => {
     }
 
     list.push(newItem)
-    console.log(list);
+    clean();
+}
+
+const clean = () => {
+    $description.val('')
+    $calories.val('')
+    $carbs.val('')
+    $protein.val('')
 }
