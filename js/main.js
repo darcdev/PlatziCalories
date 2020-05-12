@@ -1,5 +1,14 @@
-const compose = (...functions) => data =>
-    functions.reduceRight((value, func) => func(value), data)
+//Molde 
+/*
+ {
+    description : 'Manzana',
+    calories : 10,
+    carbs : 10,
+    protein : 10,
+  }
+*/
+const list = [];
+
 
 const attrsToString = (obj = {}) => {
     const keys = Object.keys(obj);
@@ -17,16 +26,20 @@ const tagAttrs = obj => (content = "") =>
 
 const tag = t => {
     if (typeof t == 'string') {
-        tagAttrs({ tag: t });
+        return tagAttrs({ tag: t });
     } else {
-        tagAttrs(t);
+        return tagAttrs(t);
     }
 }
 
+const compose = (...functions) => data =>
+    functions.reduceRight((value, func) => func(value), data)
+
 const tableRowTag = tag('tr')
-const tableRow = items => tableRowTag(tableCells(items))
-const tableCell = tag('td');
-const tableCells = items => items.map(tableCell).join('')
+const tableRow = items => compose(tableRowTag, tableCells)(items);
+// const tableRow = items => tableRowTag(tableCells(items))
+const tableCell = tag('td')
+const tableCells = items => items.map(tableCell).join('');
 
 
 const $description = $("#description");
@@ -46,17 +59,6 @@ $carbs.keypress(() => {
 $protein.keypress(() => {
     $protein.removeClass('is-invalid');
 })
-
-//Molde 
-/*
- {
-    description : 'Manzana',
-    calories : 10,
-    carbs : 10,
-    protein : 10,
-  }
-*/
-const list = [];
 
 const validateInputs = () => {
 
@@ -81,11 +83,13 @@ const add = () => {
     list.push(newItem)
     clean();
     updateTotals()
+    renderItems()
 }
 const updateTotals = () => {
     let calories = 0,
         carbs = 0,
-        protein = 0;
+        protein = 0
+
     list.map(item => {
         calories += item.calories,
             carbs += item.carbs,
@@ -101,4 +105,12 @@ const clean = () => {
     $calories.val('')
     $carbs.val('')
     $protein.val('')
+}
+
+const renderItems = () => {
+    $('tbody').empty()
+
+    list.map(item => {
+        $('tbody').append(tableRow([item.description, item.calories, item.carbs, item.protein]))
+    })
 }
