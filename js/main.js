@@ -41,7 +41,7 @@ const tableRow = items => compose(tableRowTag, tableCells)(items);
 const tableCell = tag('td')
 const tableCells = items => items.map(tableCell).join('');
 
-
+const trashIcon = tag({ tag: 'i', attrs: { class: 'fas fa-trash-alt' } })('')
 const $description = $("#description");
 const $calories = $("#calories");
 const $carbs = $("#carbs");
@@ -106,11 +106,22 @@ const clean = () => {
     $carbs.val('')
     $protein.val('')
 }
-
+const removeItem = (index) => {
+    list.splice(index, 1);
+    renderItems();
+}
 const renderItems = () => {
     $('tbody').empty()
 
-    list.map(item => {
-        $('tbody').append(tableRow([item.description, item.calories, item.carbs, item.protein]))
+    list.map((item, index) => {
+
+        const removeButton = tag({
+            tag: 'button',
+            attrs: {
+                class: 'btn btn-outline-danger',
+                onclick: `removeItem(${index})`
+            }
+        })
+        $('tbody').append(tableRow([item.description, item.calories, item.carbs, item.protein, removeButton(trashIcon)]))
     })
 }
